@@ -8,20 +8,20 @@ import jakarta.persistence.Id;
 public class Product {
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
 
     private String name;
     private int price;
     private int stock;
 
-    public Product(final int id, final String name, final int price, final int stock) {
+    public Product(final Long id, final String name, final int price, final int stock) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.stock = stock;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
