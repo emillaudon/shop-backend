@@ -3,6 +3,7 @@ package com.example.shopbackend.demo.product;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ public class ProductController {
                 .toList();
     }
 
+    @PostMapping
     public ProductDto create(@RequestBody CreateProductRequest request) {
         Product created = productService.create(request.name(), request.price(), request.stock());
         return ProductDto.from(created);

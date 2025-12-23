@@ -20,6 +20,10 @@ public class Product {
         this.stock = stock;
     }
 
+    protected Product() {
+
+    }
+
     public Long getId() {
         return id;
     }
