@@ -1,7 +1,9 @@
 package com.example.shopbackend.demo.product;
 
+import java.net.URI;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,8 +30,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDto create(@Valid @RequestBody CreateProductRequest request) {
+    public ResponseEntity<ProductDto> create(@Valid @RequestBody CreateProductRequest request) {
         Product created = productService.create(request.name(), request.price(), request.stock());
-        return ProductDto.from(created);
+
+        URI location = URI.create("/products/" + created.getId());
+        return ResponseEntity
+                .created(location)
+                .body(ProductDto.from(created));
     }
 }
