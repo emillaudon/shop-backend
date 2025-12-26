@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.shopbackend.demo.common.NotFoundException;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ProductService {
     private final ProductRepository repository;
@@ -27,8 +29,22 @@ public class ProductService {
         return repository.save(new Product(name, price, stock));
     }
 
+    @Transactional
     public void delete(Long id) {
         Product product = getById(id);
         repository.delete(product);
+    }
+
+    @Transactional
+    public Product update(Long id, UpdateProductRequest req) {
+        Product product = getById(id);
+
+        product.setName(req.name());
+        product.setPrice(req.price());
+        product.setStock(req.stock());
+
+        repository.save(product);
+
+        return product;
     }
 }
