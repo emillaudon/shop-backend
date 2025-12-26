@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 
 @Entity
 public class Order {
@@ -23,6 +24,10 @@ public class Order {
     private List<OrderItem> items = new ArrayList<>();
 
     protected Order() {
+    }
+
+    @PrePersist
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.status = Status.CREATED;
     }
