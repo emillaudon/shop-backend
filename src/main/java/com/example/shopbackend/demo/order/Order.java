@@ -39,7 +39,7 @@ public class Order {
 
     public void removeItem(OrderItem item) {
         items.remove(item);
-        item.setOrder(null);
+        item.removeOrder();
     }
 
     public Long getId() {

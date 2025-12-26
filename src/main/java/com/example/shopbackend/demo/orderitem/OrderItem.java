@@ -27,9 +27,8 @@ public class OrderItem {
 
     }
 
-    public OrderItem(Product product, Order order, int quantity, int unitPrice) {
+    public OrderItem(Product product, int quantity, int unitPrice) {
         this.product = product;
-        this.order = order;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
@@ -72,6 +71,10 @@ public class OrderItem {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public void removeOrder() {
+        this.order = null;
     }
 
 }
