@@ -33,6 +33,22 @@ public class OrderService {
                 .orElseThrow(() -> new NotFoundException("Order", id));
     }
 
+    public List<Order> getByStatus(Status status) {
+        // repository.findBy(null, null)
+        return repository.findAll();
+    }
+
+    @Transactional
+    public Order updateStatus(Long id, UpdateOrderStatusRequest request) {
+        Order order = getById(id);
+
+        Status status = Status.parseStatus(request.status());
+        // TODO: Restock on cancel
+        order.changeStatus(status);
+
+        return order;
+    }
+
     @Transactional
     public Order create(CreateOrderRequest request) {
         Order order = new Order();

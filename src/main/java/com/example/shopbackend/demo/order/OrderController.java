@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
@@ -44,7 +45,13 @@ public class OrderController {
 
         URI location = URI.create("/orders/" + savedOrder.getId());
         return ResponseEntity.created(location).body(OrderDto.from(savedOrder));
+    }
 
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<OrderDto> updateStatus(@PathVariable Long id,
+            @Valid @RequestBody UpdateOrderStatusRequest request) {
+        Order updated = orderService.updateStatus(id, request);
+        return ResponseEntity.ok(OrderDto.from(updated));
     }
 
 }

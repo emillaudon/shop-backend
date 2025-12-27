@@ -12,6 +12,27 @@ import org.springframework.http.HttpStatus;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(InvalidStatusTransitionException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleInvalidStatusTransition(InvalidStatusTransitionException ex) {
+        return new ApiError(
+                "INVALID_STATUS_TRANSITION",
+                ex.getMessage(),
+                Map.of("status", ex.getStatus(),
+                        "allowed", ex.getAllowed()));
+    }
+
+    @ExceptionHandler(InvalidStatusException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleInvalidStatus(InvalidStatusException ex) {
+        return new ApiError(
+                "INVALID_STATUS",
+                ex.getMessage(),
+                Map.of(
+                        "Status", ex.getStatus(),
+                        "allowed", ex.getAllowed()));
+    }
+
     @ExceptionHandler(OutOfStockException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleOutOfStock(OutOfStockException ex) {

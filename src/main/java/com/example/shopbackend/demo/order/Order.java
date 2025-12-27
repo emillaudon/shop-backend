@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.shopbackend.demo.common.InvalidStatusException;
+import com.example.shopbackend.demo.common.InvalidStatusTransitionException;
 import com.example.shopbackend.demo.orderitem.OrderItem;
 
 import jakarta.persistence.CascadeType;
@@ -54,6 +56,14 @@ public class Order {
 
     public Status getStatus() {
         return status;
+    }
+
+    public void changeStatus(Status newStatus) {
+        if (newStatus == null)
+            throw new InvalidStatusException("null", Status.allowedValues());
+        if (!this.status.canTransitionTo(newStatus))
+            throw new InvalidStatusTransitionException(this.status, newStatus, this.status.allowedNext());
+        this.status = newStatus;
     }
 
     public List<OrderItem> getItems() {
