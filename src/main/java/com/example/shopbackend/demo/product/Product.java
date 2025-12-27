@@ -1,5 +1,7 @@
 package com.example.shopbackend.demo.product;
 
+import com.example.shopbackend.demo.common.OutOfStockException;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -28,7 +30,7 @@ public class Product {
         if (amount <= 0)
             throw new IllegalArgumentException("Amount must be > 0");
         if (this.stock < amount)
-            throw new IllegalArgumentException("Not enough stock");
+            throw new OutOfStockException(this.id, amount, this.stock);
         this.stock -= amount;
     }
 

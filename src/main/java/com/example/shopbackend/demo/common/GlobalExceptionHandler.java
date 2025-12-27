@@ -12,6 +12,18 @@ import org.springframework.http.HttpStatus;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(OutOfStockException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleOutOfStock(OutOfStockException ex) {
+        return new ApiError(
+                "OUT_OF_STOCK",
+                ex.getMessage(),
+                Map.of(
+                        "productId", ex.getProductId(),
+                        "requested", ex.getRequested(),
+                        "available", ex.getAvailable()));
+    }
+
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleNotFound(NotFoundException ex) {
@@ -24,7 +36,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleValidation(MethodArgumentNotValidException ex) {
-        Map<String, String> fieldErrors = new LinkedHashMap<>();
+        Map<String, Object> fieldErrors = new LinkedHashMap<>();
 
         ex.getBindingResult().getFieldErrors().forEach(err -> {
             fieldErrors.putIfAbsent(err.getField(), err.getDefaultMessage());
