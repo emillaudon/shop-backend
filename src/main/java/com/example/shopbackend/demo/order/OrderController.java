@@ -85,6 +85,13 @@ public class OrderController {
         return ResponseEntity.created(location).body(OrderDto.from(savedOrder));
     }
 
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<OrderDto> cancel(@PathVariable Long id) {
+        Order cancelledOrder = orderService.cancel(id);
+
+        return ResponseEntity.ok(OrderDto.from(cancelledOrder));
+    }
+
     @PatchMapping("/{id}/status")
     public ResponseEntity<OrderDto> updateStatus(@PathVariable Long id,
             @Valid @RequestBody UpdateOrderStatusRequest request) {

@@ -64,6 +64,19 @@ public class OrderService {
     }
 
     @Transactional
+    public Order cancel(Long id) {
+        Order order = getById(id);
+
+        order.changeStatus(Status.CANCELLED);
+
+        for (OrderItem orderItem : order.getItems()) {
+            Product product = orderItem.getProduct();
+            product.increaseStock(orderItem.getQuantity());
+        }
+        return order;
+    }
+
+    @Transactional
     public Order create(CreateOrderRequest request) {
         Order order = new Order();
         for (CreateOrderItemRequest requestItem : request.items()) {
