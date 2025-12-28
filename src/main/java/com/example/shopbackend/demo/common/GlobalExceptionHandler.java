@@ -4,13 +4,48 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.http.HttpStatus;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_GATEWAY)
+    public ApiError handleMissingParam(MissingServletRequestParameterException ex) {
+        return new ApiError(
+                "MISSING_PARAMETER",
+                "Required query parameter is missing",
+                Map.of(
+                        "parameter", ex.getParameterName(),
+                        "expectedType", ex.getParameterType()));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return new ApiError(
+                "INVALID_PARAMETER",
+                "Invalid value for parameter '" + ex.getName() + "'",
+                Map.of(
+                        "parameter", ex.getName(),
+                        "value", String.valueOf(ex.getValue()),
+                        "expectedType", ex.getRequiredType().getSimpleName()));
+    }
+
+    @ExceptionHandler(InvalidDateRangeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleInvalidDateRange(InvalidDateRangeException ex) {
+        return new ApiError(
+                "INVALID_DATE_RANGE",
+                ex.getMessage(),
+                Map.of("from", ex.getFrom(),
+                        "to", ex.getTo()));
+    }
 
     @ExceptionHandler(InvalidStatusTransitionException.class)
     @ResponseStatus(HttpStatus.CONFLICT)

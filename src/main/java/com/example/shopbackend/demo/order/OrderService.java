@@ -1,16 +1,17 @@
 package com.example.shopbackend.demo.order;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.shopbackend.demo.common.InvalidDateRangeException;
 import com.example.shopbackend.demo.common.NotFoundException;
 import com.example.shopbackend.demo.orderitem.CreateOrderItemRequest;
 import com.example.shopbackend.demo.orderitem.OrderItem;
 import com.example.shopbackend.demo.product.Product;
 import com.example.shopbackend.demo.product.ProductService;
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -36,6 +37,13 @@ public class OrderService {
     public List<Order> getByStatus(String rawStatus) {
         Status status = Status.parseStatus(rawStatus);
         return repository.findByStatus(status);
+    }
+
+    public List<Order> getCreatedBetween(LocalDateTime from, LocalDateTime to) {
+        if (from.isAfter(to))
+            throw new InvalidDateRangeException(from, to);
+
+        return repository.findByCreatedAtBetween(from, to);
     }
 
     @Transactional

@@ -1,8 +1,10 @@
 package com.example.shopbackend.demo.order;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +27,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping
+    @GetMapping(params = { "!status", "!from", "!to" })
     public List<OrderDto> getAll() {
         return orderService.getAll()
                 .stream()
@@ -43,6 +45,16 @@ public class OrderController {
     public List<OrderDto> getByStatus(@RequestParam(required = false) String status) {
         System.out.println(orderService.getByStatus(status));
         return orderService.getByStatus(status)
+                .stream()
+                .map(OrderDto::from)
+                .toList();
+    }
+
+    @GetMapping(params = { "from", "to" })
+    public List<OrderDto> getCreatedBetween(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) {
+        return orderService.getCreatedBetween(from, to)
                 .stream()
                 .map(OrderDto::from)
                 .toList();
