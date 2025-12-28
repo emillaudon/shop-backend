@@ -54,10 +54,11 @@ public class OrderService {
 
         order.changeStatus(status);
 
-        for (OrderItem orderItem : order.getItems()) {
-            Product product = orderItem.getProduct();
-            product.increaseStock(orderItem.getQuantity());
-        }
+        if (status == Status.CANCELLED)
+            for (OrderItem orderItem : order.getItems()) {
+                Product product = orderItem.getProduct();
+                product.increaseStock(orderItem.getQuantity());
+            }
 
         return order;
     }
