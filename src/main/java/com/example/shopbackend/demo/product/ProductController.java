@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/products")
@@ -30,6 +31,14 @@ public class ProductController {
         ProductDto dto = ProductDto.from(product);
 
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping(params = "query")
+    public List<ProductDto> getByName(@RequestParam String query) {
+        return productService.getByName(query)
+                .stream()
+                .map(ProductDto::from)
+                .toList();
     }
 
     @GetMapping

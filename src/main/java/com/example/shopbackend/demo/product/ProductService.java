@@ -21,6 +21,10 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundException("Product", id));
     }
 
+    public List<Product> getByName(String query) {
+        return repository.findByNameContainingIgnoreCase(query);
+    }
+
     public List<Product> getAll() {
         return repository.findAll();
     }
