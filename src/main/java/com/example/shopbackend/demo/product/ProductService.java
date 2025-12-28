@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.shopbackend.demo.common.InvalidDateRangeException;
+import com.example.shopbackend.demo.common.InvalidPriceRangeException;
 import com.example.shopbackend.demo.common.NotFoundException;
 
 import jakarta.transaction.Transactional;
@@ -30,6 +32,12 @@ public class ProductService {
             return repository.findByStockGreaterThan(0);
 
         return repository.findByStock(0);
+    }
+
+    public List<Product> getPriceBetween(int from, int to) {
+        if (from > to)
+            throw new InvalidPriceRangeException(from, to);
+        return repository.findByPriceBetween(from, to);
     }
 
     public List<Product> getAll() {

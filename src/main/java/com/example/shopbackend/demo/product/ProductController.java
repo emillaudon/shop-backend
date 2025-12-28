@@ -49,7 +49,15 @@ public class ProductController {
                 .toList();
     }
 
-    @GetMapping
+    @GetMapping(params = { "from", "to" })
+    public List<ProductDto> getMethodName(@RequestParam int from, @RequestParam int to) {
+        return productService.getPriceBetween(from, to)
+                .stream()
+                .map(ProductDto::from)
+                .toList();
+    }
+
+    @GetMapping(params = { "!inStock", "!from", "!to" })
     public List<ProductDto> getAll() {
         return productService.getAll()
                 .stream()

@@ -10,4 +10,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByStockGreaterThan(int stock);
 
     List<Product> findByStock(int stock);
+
+    List<Product> findByPriceBetween(int from, int to);
 }
