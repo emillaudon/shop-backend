@@ -25,6 +25,13 @@ public class ProductService {
         return repository.findByNameContainingIgnoreCase(query);
     }
 
+    public List<Product> getInStock(boolean inStock) {
+        if (inStock)
+            return repository.findByStockGreaterThan(0);
+
+        return repository.findByStock(0);
+    }
+
     public List<Product> getAll() {
         return repository.findAll();
     }
