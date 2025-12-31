@@ -54,7 +54,6 @@ public class OrderController {
 
     @GetMapping(params = "status")
     public List<OrderDto> getByStatus(@RequestParam(required = false) String status) {
-        System.out.println(orderService.getByStatus(status));
         return orderService.getByStatus(status)
                 .stream()
                 .map(OrderDto::from)
