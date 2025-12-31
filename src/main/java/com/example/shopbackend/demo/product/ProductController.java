@@ -50,7 +50,7 @@ public class ProductController {
     }
 
     @GetMapping(params = { "from", "to" })
-    public List<ProductDto> getMethodName(@RequestParam int from, @RequestParam int to) {
+    public List<ProductDto> getPriceBetween(@RequestParam int from, @RequestParam int to) {
         return productService.getPriceBetween(from, to)
                 .stream()
                 .map(ProductDto::from)
