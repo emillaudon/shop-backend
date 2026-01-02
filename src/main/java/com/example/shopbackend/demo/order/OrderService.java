@@ -82,7 +82,7 @@ public class OrderService {
         for (CreateOrderItemRequest requestItem : request.items()) {
             Product product = productService.getById(requestItem.productId());
 
-            product.decreaseStock(requestItem.quantity());
+            productService.reserveStockOrThrow(product.getId(), requestItem.quantity());
             OrderItem orderItem = new OrderItem(
                     product, requestItem.quantity(), product.getPrice());
             order.addItem(orderItem);

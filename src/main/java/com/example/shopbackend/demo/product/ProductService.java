@@ -6,15 +6,18 @@ import org.springframework.stereotype.Service;
 
 import com.example.shopbackend.demo.common.InvalidPriceRangeException;
 import com.example.shopbackend.demo.common.NotFoundException;
+import com.example.shopbackend.demo.common.OutOfStockException;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class ProductService {
     private final ProductRepository repository;
+    private final ProductStockGateway productStockGateway;
 
-    public ProductService(final ProductRepository repository) {
+    public ProductService(final ProductRepository repository, final ProductStockGateway productStockGateway) {
         this.repository = repository;
+        this.productStockGateway = productStockGateway;
     }
 
     public Product getById(Long id) {
@@ -31,6 +34,19 @@ public class ProductService {
             return repository.findByStockGreaterThan(0);
 
         return repository.findByStock(0);
+    }
+
+    @Transactional
+    public Product reserveStockOrThrow(Long id, int quantity) {
+        boolean ok = productStockGateway.tryDecreaseStock(id, quantity);
+        if (!ok) {
+            int availableStock = repository.findById(id)
+                    .map(Product::getStock)
+                    .orElse(0);
+            throw new OutOfStockException(id, quantity, availableStock);
+        }
+
+        return getById(id);
     }
 
     public List<Product> getPriceBetween(int from, int to) {
