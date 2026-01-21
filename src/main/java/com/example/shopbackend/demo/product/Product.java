@@ -3,6 +3,7 @@ package com.example.shopbackend.demo.product;
 import com.example.shopbackend.demo.common.OutOfStockException;
 
 import io.micrometer.common.lang.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -18,6 +19,7 @@ public class Product {
     private int stock;
 
     @Nullable
+    @Column(length = 500)
     private String imageKey;
 
     public Product(final String name, final int price, final int stock) {
@@ -74,5 +76,9 @@ public class Product {
 
     public String getImageKey() {
         return this.imageKey;
+    }
+
+    public void setImageKey(String imageKey) {
+        this.imageKey = imageKey;
     }
 }

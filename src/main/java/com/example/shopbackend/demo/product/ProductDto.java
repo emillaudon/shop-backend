@@ -7,8 +7,10 @@ public record ProductDto(
         String name,
         int price,
         int stock,
-        @Nullable String imageKey) {
+        @Nullable String imageUrl) {
     public static ProductDto from(Product product) {
-        return new ProductDto(product.getId(), product.getName(), product.getPrice(), product.getStock(), product.getImageKey());
+        String imageUrl = product.getImageKey() != null ? "/api/images/" + product.getImageKey() : null;
+
+        return new ProductDto(product.getId(), product.getName(), product.getPrice(), product.getStock(), imageUrl);
     }
 }

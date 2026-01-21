@@ -1,4 +1,4 @@
-package com.example.shopbackend.storage.local;
+package com.example.shopbackend.demo.storage.local;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.shopbackend.storage.ImageStorage;
+import com.example.shopbackend.demo.storage.ImageStorage;
 
 @Service
 @Profile("dev")

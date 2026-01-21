@@ -1,4 +1,4 @@
-package com.example.shopbackend.storage;
+package com.example.shopbackend.demo.storage;
 
 import org.springframework.web.multipart.MultipartFile;
 

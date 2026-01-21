@@ -3,10 +3,12 @@ package com.example.shopbackend.demo.product;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.shopbackend.demo.common.InvalidPriceRangeException;
 import com.example.shopbackend.demo.common.NotFoundException;
 import com.example.shopbackend.demo.common.OutOfStockException;
+import com.example.shopbackend.demo.storage.ImageStorage;
 
 import jakarta.transaction.Transactional;
 
@@ -14,10 +16,12 @@ import jakarta.transaction.Transactional;
 public class ProductService {
     private final ProductRepository repository;
     private final ProductStockGateway productStockGateway;
+    private final ImageStorage imageStorage;
 
-    public ProductService(final ProductRepository repository, final ProductStockGateway productStockGateway) {
+    public ProductService(final ProductRepository repository, final ProductStockGateway productStockGateway, final ImageStorage imageStorage) {
         this.repository = repository;
         this.productStockGateway = productStockGateway;
+        this.imageStorage = imageStorage;
     }
 
     public Product getById(Long id) {
@@ -80,5 +84,30 @@ public class ProductService {
         repository.save(product);
 
         return product;
+    }
+
+    public Product uploadImage(long id, MultipartFile file) {
+        if (file.isEmpty()) throw new IllegalArgumentException("Uploaded file is empty");
+
+        String contentType = file.getContentType();
+        if (contentType == null) throw new IllegalArgumentException("File has no content type");
+
+        String extension = switch (contentType) {
+            case "image/png" -> ".png";
+            case "image/jpeg" -> ".jpeg";
+            case "image/jpg" -> ".jpg";
+            case "image/webp" -> ".webp";
+            default -> throw new IllegalArgumentException("Unsupported image type: " + contentType);
+        };
+
+        Product product = getById(id);
+
+        String imageKey = "products/" + id + "/main" + extension;
+
+        imageStorage.save(file, imageKey);
+
+        product.setImageKey(imageKey);
+
+        return repository.save(product);
     }
 }
