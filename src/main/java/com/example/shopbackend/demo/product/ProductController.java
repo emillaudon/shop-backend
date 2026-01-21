@@ -89,7 +89,7 @@ public class ProductController {
         return ResponseEntity.ok(ProductDto.from(updated));
     }
 
-    @PostMapping("{id}/image")
+    @PostMapping("/{id}/image")
     public ResponseEntity<ProductDto> addImage(@PathVariable long id, @RequestPart("file") MultipartFile file) {
         Product updated = productService.uploadImage(id, file);
         
