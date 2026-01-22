@@ -4,7 +4,8 @@ public record OrderItemDto(
         Long productId,
         int quantity,
         int unitPrice,
-        String imageUrl) {
+        String imageUrl,
+        String productName) {
     public static OrderItemDto from(OrderItem item) {
         String imageUrl = item.getProduct().getImageKey() == null
                 ? null
@@ -13,6 +14,7 @@ public record OrderItemDto(
                 item.getProduct().getId(),
                 item.getQuantity(),
                 item.getUnitPrice(),
-                imageUrl);
+                imageUrl,
+                item.getProduct().getName());
     }
 }
