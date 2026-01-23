@@ -23,10 +23,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    public User(String email, String passwordHash, Role role) {
+    public User(String email, String passwordHash) {
         this.email = email;
         this.passwordHash = passwordHash;
-        this.role = role;
     }
 
     protected User() {

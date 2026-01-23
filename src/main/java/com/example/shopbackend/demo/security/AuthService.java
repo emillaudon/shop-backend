@@ -27,8 +27,7 @@ public class AuthService {
             throw new EmailAlreadyInUseException(req.email());
         User user = new User(
                 req.email(),
-                passwordEncoder.encode(req.password()),
-                Role.USER);
+                passwordEncoder.encode(req.password()));
 
         userRepository.save(user);
     }
