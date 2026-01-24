@@ -1,6 +1,5 @@
 package com.example.shopbackend.demo.bootstrap;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

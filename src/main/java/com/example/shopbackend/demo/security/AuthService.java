@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.shopbackend.demo.common.BadCredentialsException;
 import com.example.shopbackend.demo.common.EmailAlreadyInUseException;
-import com.example.shopbackend.demo.user.Role;
 import com.example.shopbackend.demo.user.User;
 import com.example.shopbackend.demo.user.UserRepository;
 
@@ -39,7 +38,7 @@ public class AuthService {
         if (!passwordEncoder.matches(req.password(), user.getPasswordHash()))
             throw new BadCredentialsException();
 
-        return jwtService.generateToken(user.getEmail());
+        return jwtService.generateToken(user);
     }
 
 }

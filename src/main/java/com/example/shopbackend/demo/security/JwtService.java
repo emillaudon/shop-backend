@@ -10,6 +10,8 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.example.shopbackend.demo.user.User;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -26,12 +28,13 @@ public class JwtService {
         this.expirationMinutes = expirationMinutes;
     }
 
-    public String generateToken(String email) {
+    public String generateToken(User user) {
         Instant now = Instant.now();
         Instant exp = now.plus(expirationMinutes, ChronoUnit.MINUTES);
 
         return Jwts.builder()
-                .subject(email)
+                .subject(user.getEmail())
+                .claim("role", user.getRole().name())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(exp))
                 .signWith(key)
@@ -40,6 +43,10 @@ public class JwtService {
 
     public String extractEmail(String token) {
         return parseClaims(token).getSubject();
+    }
+
+    public String extractRole(String token) {
+        return parseClaims(token).get("role", String.class);
     }
 
     public boolean isValid(String token) {
