@@ -28,6 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/seed-images/**").permitAll()
 
                         // admin-only writes
                         .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")

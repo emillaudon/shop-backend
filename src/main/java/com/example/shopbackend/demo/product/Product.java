@@ -28,6 +28,13 @@ public class Product {
         this.stock = stock;
     }
 
+    public Product(final String name, final int price, final int stock, final String imageKey) {
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+        this.imageKey = imageKey;
+    }
+
     protected Product() {
 
     }
